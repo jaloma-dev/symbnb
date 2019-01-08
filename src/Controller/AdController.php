@@ -9,6 +9,8 @@ use App\Repository\AdRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdController extends AbstractController
@@ -16,8 +18,7 @@ class AdController extends AbstractController
     /**
      * @Route("/ads", name="ads_index")
      */
-    public function index(AdRepository $adRepo)
-    {
+    public function index(AdRepository $adRepo) {
         $ads = $adRepo->findAll();
         return $this->render('ad/index.html.twig', [
             'ads' => $ads,
@@ -27,6 +28,7 @@ class AdController extends AbstractController
     /**
      * Permet de créé une annonce
      * @Route("/ads/new", name="ads_new")
+     * @IsGranted("ROLE_USER")
      * 
      * @return Response
      */
@@ -78,7 +80,7 @@ class AdController extends AbstractController
      * Permet d'afficher le formulaire d'édition
      * 
      * @Route("/ads/{slug}/edit", name="ads_edit")
-     *
+     * @Security("is_granted('ROLE_USER') and user === ad.getAuthor()", message="Cette annonce ne vous appartient pas. Vous en pouvez pas la modifier")
      * @return Response
      */
     public function edit(Ad $ad, ObjectManager $manager, Request $request){
@@ -108,6 +110,24 @@ class AdController extends AbstractController
             'form' => $form->createView(),
             'ad' => $ad,
         ]);
+    }
+
+    /**
+     * Supression d'une annonce
+     * @Route("ads/{slug}/delete", name="ads_delete")
+     * @Security("is_granted('ROLE_USER') and user === ad.getAuthor()")
+     * @return void
+     */
+    public function delete(Ad $ad, ObjectManager $manager) {
+        $manager->remove($ad);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "L'annonce <strong>{$ad->getTitle()}</strong>a bien été supprimé"
+        );
+
+        return $this->redirectToRoute('ads_index');
     }
 
 }
