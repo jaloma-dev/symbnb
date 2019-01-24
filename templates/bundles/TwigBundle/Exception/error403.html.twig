@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Interdit{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Vous n'avez pas les droits nécessaire pour accéder à cette page.</h1>
+        <a href="{{ path('homepage') }}" class="btn btn-primary">Retour à l'accueil</a>
+    </div>
+{% endblock %}

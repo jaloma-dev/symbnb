@@ -80,7 +80,7 @@ class AdController extends AbstractController
      * Permet d'afficher le formulaire d'édition
      * 
      * @Route("/ads/{slug}/edit", name="ads_edit")
-     * @Security("is_granted('ROLE_USER') and user === ad.getAuthor()", message="Cette annonce ne vous appartient pas. Vous en pouvez pas la modifier")
+     * @Security("is_granted('ROLE_USER') and user === ad.getAuthor()", message="Cette annonce ne vous appartient pas. Vous ne pouvez pas la modifier")
      * @return Response
      */
     public function edit(Ad $ad, ObjectManager $manager, Request $request){
