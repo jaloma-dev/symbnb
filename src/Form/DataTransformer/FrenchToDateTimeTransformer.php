@@ -13,7 +13,7 @@ class FrenchToDateTimeTransformer implements DataTransformerInterface {
             return '';
         }
         
-        return $date->foramt('d/m/Y');
+        return $date->format('d/m/Y');
     }
 
     public function reverseTransform($frenchDate) {

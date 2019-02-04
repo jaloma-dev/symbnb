@@ -33,7 +33,7 @@ class Booking
     /**
      * @ORM\Column(type="datetime")
      * @Assert\Date(message="Attention, ce n'est pas une date")
-     * @Assert\GreaterThan("today", message="Réservation au plus tôt pour le lendemain.")
+     * @Assert\GreaterThan("today", message="Réservation au plus tôt pour le lendemain.", groups={"front"})
      */
     private $startDate;
 
